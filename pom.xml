@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jboss.threads</groupId>
+    <artifactId>jboss-virtual-threads</artifactId>
+    <packaging>jar</packaging>
+    <version>2.0-SNAPSHOT</version>
+
+    <name>JBoss Virtual Threads</name>
+    <description>Virtual thread environment and utilities</description>
+    <url>https://github.com/jboss/jboss-virtual-threads</url>
+
+    <parent>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>50</version>
+    </parent>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/jboss/jboss-virtual-threads/issues</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/jboss/jboss-virtual-threads</url>
+        <connection>scm:git:git@github.com:jboss/jboss-virtual-threads.git</connection>
+        <developerConnection>scm:git:git@github.com:jboss/jboss-virtual-threads.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
+        <test.level>INFO</test.level>
+
+        <jboss.threads.eqe.statistics>true</jboss.threads.eqe.statistics>
+        <jboss.threads.eqe.unlimited-queue>false</jboss.threads.eqe.unlimited-queue>
+        <jboss.threads.eqe.register-mbean>false</jboss.threads.eqe.register-mbean>
+
+        <jdk.min.version>26</jdk.min.version>
+        <maven.compiler.release>26</maven.compiler.release>
+
+        <version.jboss.logging.tools>3.0.4.Final</version.jboss.logging.tools>
+
+        <nexus.url>https://repository.jboss.org/nexus3</nexus.url>
+        <nexus.repo>jboss-common</nexus.repo>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.smallrye.common</groupId>
+                <artifactId>smallrye-common-bom</artifactId>
+                <version>2.13.8</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.threads</groupId>
+            <artifactId>jboss-threads</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging-annotations</artifactId>
+            <version>${version.jboss.logging.tools}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.6.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>io.smallrye.common</groupId>
+            <artifactId>smallrye-common-constraint</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.13.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.27.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logmanager</groupId>
+            <artifactId>jboss-logmanager</artifactId>
+            <version>3.1.2.Final</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}</directory>
+                <includes>
+                    <include>LICENSE.txt</include>
+                </includes>
+                <targetPath>META-INF</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <configuration>
+                            <argLine>--add-opens java.base/java.lang=org.jboss.threads.virtual</argLine>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <systemPropertyVariables>
+                        <test.level>${test.level}</test.level>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <jboss.threads.eqe.statistics>${jboss.threads.eqe.statistics}</jboss.threads.eqe.statistics>
+                        <jboss.threads.eqe.unlimited-queue>${jboss.threads.eqe.unlimited-queue}</jboss.threads.eqe.unlimited-queue>
+                        <jboss.threads.eqe.register-mbean>${jboss.threads.eqe.register-mbean}</jboss.threads.eqe.register-mbean>
+                    </systemPropertyVariables>
+                    <useModulePath>true</useModulePath>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
