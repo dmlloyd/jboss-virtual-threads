@@ -1,6 +1,3 @@
-/**
- *
- */
 module org.jboss.threads.virtual {
     requires static org.jboss.logging.annotations;
 

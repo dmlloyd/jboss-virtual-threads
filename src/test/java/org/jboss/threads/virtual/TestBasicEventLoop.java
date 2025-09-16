@@ -37,15 +37,9 @@ public final class TestBasicEventLoop {
         EventLoopDispatcher eld = new EventLoopDispatcher(scheduler, el);
         el.thread = eld.thread();
         eld.startThread(scheduler.builder().unstarted(() -> System.out.println("HELLO WORLD!")));
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {}
-            eld.startThread(scheduler.builder().unstarted(() -> System.out.println("HELLO WORLD 2!")));
-        }).start();
         eld.startThread(scheduler.builder().unstarted(() -> {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(400);
             } catch (InterruptedException e) {
                 // ignored
             }
@@ -53,12 +47,18 @@ public final class TestBasicEventLoop {
         }));
         eld.startThread(scheduler.builder().unstarted(() -> {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(600);
             } catch (InterruptedException e) {
                 // ignored
             }
             eld.initiateShutdown();
         }));
+        new Thread(() -> {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {}
+            eld.startThread(scheduler.builder().unstarted(() -> System.out.println("HELLO WORLD 2!")));
+        }).start();
         eld.run();
         System.out.println("GOODBYE!");
     }

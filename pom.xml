@@ -132,7 +132,15 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
-                            <argLine>--add-opens java.base/java.lang=org.jboss.threads.virtual</argLine>
+                            <useModulePath>true</useModulePath>
+                            <argLine>
+                                --enable-native-access=org.jboss.threads.virtual
+                                --enable-native-access=ALL-UNNAMED
+                                --add-opens java.base/java.lang=org.jboss.threads.virtual
+                                --add-opens java.base/java.lang=ALL-UNNAMED
+                                --add-opens java.base/jdk.internal.vm=org.jboss.threads.virtual
+                                --add-opens java.base/jdk.internal.vm=ALL-UNNAMED
+                            </argLine>
                         </configuration>
                     </execution>
                 </executions>
